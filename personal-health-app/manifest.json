@@ -1,0 +1,10 @@
+{
+    "name": "VegFit Planner",
+    "short_name": "VegFit",
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#f4f6f1",
+    "theme_color": "#1e7f52",
+    "description": "Personal vegetarian diet and gym progress planner",
+    "icons": []
+}
