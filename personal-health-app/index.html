@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VegFit Planner</title>
+    <meta name="theme-color" content="#1e7f52">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main class="app">
+        <section class="topbar">
+            <div>
+                <p class="eyebrow">Personal Health</p>
+                <h1>VegFit Planner</h1>
+            </div>
+            <div class="top-actions">
+                <button class="text-button" id="sharePlanBtn">Share to phone</button>
+                <div class="today-pill" id="todayLabel"></div>
+            </div>
+        </section>
+
+        <section class="layout">
+            <aside class="panel profile-panel">
+                <div class="section-head">
+                    <h2>Profile</h2>
+                    <button class="icon-button" id="resetBtn" title="Reset saved app data" aria-label="Reset saved app data">R</button>
+                </div>
+
+                <form id="profileForm">
+                    <label>
+                        Weight
+                        <span class="input-row">
+                            <input type="number" id="weight" min="30" max="220" step="0.1" required>
+                            <span>kg</span>
+                        </span>
+                    </label>
+
+                    <label>
+                        Height
+                        <span class="input-row">
+                            <input type="number" id="height" min="120" max="230" step="1" required>
+                            <span>cm</span>
+                        </span>
+                    </label>
+
+                    <label>
+                        Age
+                        <span class="input-row">
+                            <input type="number" id="age" min="13" max="90" step="1" required>
+                            <span>yr</span>
+                        </span>
+                    </label>
+
+                    <label>
+                        Waist
+                        <span class="input-row">
+                            <input type="number" id="waist" min="40" max="180" step="0.5">
+                            <span>cm</span>
+                        </span>
+                    </label>
+
+                    <label>
+                        Goal
+                        <select id="goal">
+                            <option value="recomp">Build muscle and reduce fat</option>
+                            <option value="muscle">Lean muscle gain</option>
+                            <option value="fatloss">Fat loss</option>
+                            <option value="maintain">Maintain fitness</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Diet type
+                        <select id="dietType">
+                            <option value="vegEgg">Vegetarian + eggs</option>
+                            <option value="veg">Strict vegetarian</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Gym start
+                        <input type="time" id="gymStart" required>
+                    </label>
+
+                    <label>
+                        Gym duration
+                        <span class="input-row">
+                            <input type="number" id="gymDuration" min="20" max="180" step="5" required>
+                            <span>min</span>
+                        </span>
+                    </label>
+
+                    <button type="submit">Update Plan</button>
+                </form>
+
+                <div class="sync-panel">
+                    <p class="field-label">Phone update</p>
+                    <p class="sync-copy">Use Share to phone after updating your plan. Open that link on your phone to import the same plan and logs.</p>
+                    <button class="text-button" id="exportBtn">Copy backup</button>
+                    <button class="text-button" id="importBtn">Import backup</button>
+                </div>
+            </aside>
+
+            <section class="content">
+                <section class="metrics-grid movable-panel" data-panel="metrics" draggable="true">
+                    <div class="drag-handle" title="Drag to move this section">Move</div>
+                    <article class="metric-card">
+                        <span>Daily protein</span>
+                        <strong id="proteinTarget">0 g</strong>
+                        <small id="proteinNote">Set your profile</small>
+                    </article>
+                    <article class="metric-card">
+                        <span>Calories</span>
+                        <strong id="calorieTarget">0 kcal</strong>
+                        <small id="calorieNote">Estimated range</small>
+                    </article>
+                    <article class="metric-card">
+                        <span>Training load</span>
+                        <strong id="fatigueScore">0%</strong>
+                        <small id="fatigueNote">Based on recent logs</small>
+                    </article>
+                    <article class="metric-card">
+                        <span>Muscles left</span>
+                        <strong id="muscleLeftCount">0</strong>
+                        <small id="muscleLeftNote">This week</small>
+                    </article>
+                </section>
+
+                <section class="panel movable-panel" data-panel="meals" draggable="true">
+                    <div class="section-head">
+                        <h2>Meal Timing</h2>
+                        <span class="drag-handle" title="Drag to move this section">Move</span>
+                        <span class="status-chip" id="nextMealChip">Ready</span>
+                    </div>
+                    <div class="timeline" id="mealTimeline"></div>
+                </section>
+
+                <section class="split movable-panel" data-panel="gym" draggable="true">
+                    <article class="panel">
+                        <div class="section-head">
+                            <h2>Today Gym Log</h2>
+                            <span class="drag-handle" title="Drag to move this section">Move</span>
+                            <span class="status-chip" id="logStatus">Not logged</span>
+                        </div>
+                        <form id="workoutForm">
+                            <label>
+                                Workout type
+                                <select id="workoutType">
+                                    <option value="strength">Strength training</option>
+                                    <option value="cardio">Cardio</option>
+                                    <option value="rest">Rest / recovery</option>
+                                    <option value="mobility">Mobility</option>
+                                </select>
+                            </label>
+
+                            <div>
+                                <p class="field-label">Muscles trained</p>
+                                <div class="muscle-grid" id="musclePicker"></div>
+                            </div>
+
+                            <label>
+                                Effort
+                                <input type="range" id="effort" min="1" max="10" value="6">
+                                <span class="range-value" id="effortValue">6 / 10</span>
+                            </label>
+
+                            <label>
+                                Sleep last night
+                                <span class="input-row">
+                                    <input type="number" id="sleep" min="0" max="12" step="0.5" value="7">
+                                    <span>hr</span>
+                                </span>
+                            </label>
+
+                            <label>
+                                Soreness
+                                <input type="range" id="soreness" min="0" max="10" value="3">
+                                <span class="range-value" id="sorenessValue">3 / 10</span>
+                            </label>
+
+                            <label>
+                                Notes
+                                <textarea id="notes" rows="3" placeholder="Exercises, sets, reps, or soreness"></textarea>
+                            </label>
+
+                            <button type="submit">Save Today</button>
+                        </form>
+                    </article>
+
+                    <article class="panel">
+                        <div class="section-head">
+                            <h2>Muscle Balance</h2>
+                            <button class="text-button" id="suggestWorkoutBtn">Suggest workout</button>
+                        </div>
+                        <div class="muscle-status" id="muscleStatus"></div>
+                        <div class="recommendation" id="workoutRecommendation"></div>
+                    </article>
+                </section>
+
+                <section class="split movable-panel" data-panel="diet" draggable="true">
+                    <article class="panel">
+                        <div class="section-head">
+                            <h2>Vegetarian Diet</h2>
+                            <span class="drag-handle" title="Drag to move this section">Move</span>
+                            <span class="status-chip" id="dietChip">Balanced</span>
+                        </div>
+                        <div class="food-list" id="dietPlan"></div>
+                    </article>
+
+                    <article class="panel">
+                        <div class="section-head">
+                            <h2>Post-Gym Food</h2>
+                            <span class="status-chip" id="postGymChip">After workout</span>
+                        </div>
+                        <div class="food-list" id="postGymFood"></div>
+                    </article>
+                </section>
+
+                <section class="split movable-panel" data-panel="recovery" draggable="true">
+                    <article class="panel">
+                        <div class="section-head">
+                            <h2>Rest Planner</h2>
+                            <span class="drag-handle" title="Drag to move this section">Move</span>
+                            <span class="status-chip" id="restChip">Smart rest</span>
+                        </div>
+                        <div class="recovery-grid" id="recoveryPlan"></div>
+                    </article>
+
+                    <article class="panel">
+                        <div class="section-head">
+                            <h2>Shopping List</h2>
+                            <button class="text-button" id="copyGroceriesBtn">Copy</button>
+                        </div>
+                        <div class="food-list" id="shoppingList"></div>
+                    </article>
+                </section>
+
+                <section class="panel movable-panel" data-panel="progress" draggable="true">
+                    <div class="section-head">
+                        <h2>Progress</h2>
+                        <span class="drag-handle" title="Drag to move this section">Move</span>
+                        <button class="text-button" id="clearTodayBtn">Clear today</button>
+                    </div>
+                    <div class="progress-wrap">
+                        <div>
+                            <p class="field-label">Weekly completion</p>
+                            <div class="bar"><span id="weekBar"></span></div>
+                        </div>
+                        <div class="history" id="history"></div>
+                    </div>
+                </section>
+            </section>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
