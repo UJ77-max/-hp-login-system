@@ -1,0 +1,23 @@
+.mobile-move {
+    display: none;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.move-button {
+    min-height: 34px;
+    flex: 1;
+    padding: 7px 10px;
+    background: #eef4fb;
+    color: #2b65c8;
+}
+
+@media (max-width: 620px) {
+    .drag-handle {
+        display: none;
+    }
+
+    .mobile-move {
+        display: flex;
+    }
+}
